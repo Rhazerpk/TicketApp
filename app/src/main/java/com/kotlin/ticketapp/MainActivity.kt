@@ -1,5 +1,6 @@
 package com.kotlin.ticketapp
 
+import android.content.ClipData.Item
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -8,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Refresh
@@ -35,6 +37,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.kotlin.ticketapp.data.local.entities.Client
 import com.kotlin.ticketapp.domain.TicketDb
 import com.kotlin.ticketapp.ui.theme.TicketAppTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -64,80 +67,80 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun TicketScreen(viewModel: ClienteViewModel = hiltViewModel()) {
 
-//    val clientes by viewModel.clientes.collectAsStateWithLifecycle()
-//
-//    val snackbarHostState = remember { SnackbarHostState() }
-//
-//    LaunchedEffect(Unit) {
-//        viewModel.isMessageShownFlow.collectLatest {
-//            if (it) {
-//                snackbarHostState.showSnackbar(
-//                    message = "Cliente guardado",
-//                    duration = SnackbarDuration.Short
-//                )
-//            }
-//        }
-//    }
-//
-//    Scaffold(
-//        snackbarHost = { SnackbarHost(snackbarHostState) },
-//        modifier = Modifier
-//            .fillMaxSize(),
-//        topBar = {
-//            TopAppBar(
-//                title = { Text(text = "Clientes") },
-//                actions = {
-//                    IconButton(onClick = { viewModel.limpiar() }) {
-//                        Icon(
-//                            imageVector = Icons.Default.Refresh, contentDescription = "Refresh"
-//                        )
-//                    }
-//                }
-//            )
-//        }
-//    ) {
-//        Column(
-//            modifier = Modifier
-//                .fillMaxSize()
-//                .padding(it)
-//                .padding(8.dp)
-//        ) {
-//            Column(
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .padding(8.dp)
-//            ) {
-//                Text(text = "Cliente detalles", style = MaterialTheme.typography.titleMedium)
-//
-//                OutlinedTextField(
-//                    value = viewModel.Name,
-//                    onValueChange = { viewModel.Name = it },
-//                    modifier = Modifier.fillMaxWidth(),
-//                    label = { Text(text = "Nombre") },
-//                    singleLine = true
-//                )
-//                val keyboardController = LocalSoftwareKeyboardController.current
-//                OutlinedButton(onClick = {
-//                    keyboardController?.hide()
-//                    if(viewModel.Name != ""){
-//                        viewModel.saveCliente()
-//                        viewModel.setMessageShown()}
-//
-//                }, modifier = Modifier.fillMaxWidth())
-//                {
-//                    Icon(imageVector = Icons.Default.CheckCircle, contentDescription = "Guardar")
-//                    Text(text = "Guardar")
-//                }
-//            }
-//
-//            Text(text = "Lista de clientes", style = MaterialTheme.typography.titleMedium)
-//            LazyColumn(modifier = Modifier.fillMaxWidth()) {
-//                items(clientes){ Cliente ->
-//                    Text(text = Cliente.Nombre)
-//                }
-//            }
-//        }
-//    }
+    val clientes by viewModel.clientes.collectAsStateWithLifecycle()
+
+    val snackbarHostState = remember { SnackbarHostState() }
+
+    LaunchedEffect(Unit) {
+        viewModel.isMessageShownFlow.collectLatest {
+            if (it) {
+                snackbarHostState.showSnackbar(
+                    message = "Cliente guardado",
+                    duration = SnackbarDuration.Short
+                )
+            }
+        }
+    }
+
+    Scaffold(
+        snackbarHost = { SnackbarHost(snackbarHostState) },
+        modifier = Modifier
+            .fillMaxSize(),
+        topBar = {
+            TopAppBar(
+                title = { Text(text = "Clientes") },
+                actions = {
+                    IconButton(onClick = { viewModel.limpiar() }) {
+                        Icon(
+                            imageVector = Icons.Default.Refresh, contentDescription = "Refresh"
+                        )
+                    }
+                }
+            )
+        }
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(it)
+                .padding(8.dp)
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp)
+            ) {
+                Text(text = "Client details", style = MaterialTheme.typography.titleMedium)
+
+                OutlinedTextField(
+                    value = viewModel.Name,
+                    onValueChange = { viewModel.Name = it },
+                    modifier = Modifier.fillMaxWidth(),
+                    label = { Text(text = "Name") },
+                    singleLine = true
+                )
+                val keyboardController = LocalSoftwareKeyboardController.current
+                OutlinedButton(onClick = {
+                    keyboardController?.hide()
+                    if(viewModel.Name != ""){
+                        viewModel.saveCliente()
+                        viewModel.setMessageShown()}
+
+                }, modifier = Modifier.fillMaxWidth())
+                {
+                    Icon(imageVector = Icons.Default.CheckCircle, contentDescription = "Guardar")
+                    Text(text = "Guardar")
+                }
+            }
+
+            Text(text = "Lista de clientes", style = MaterialTheme.typography.titleMedium)
+            LazyColumn(modifier = Modifier.fillMaxWidth()) {
+                items(clientes){Client ->
+                    Text(text = Client.name)
+                }
+            }
+        }
+    }
 }
 
 @Preview(showBackground = true)
