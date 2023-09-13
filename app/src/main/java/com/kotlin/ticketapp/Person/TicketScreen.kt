@@ -239,7 +239,7 @@ fun TicketScreen(
             LazyColumn(modifier = Modifier.fillMaxWidth()) {
                 items(clients){ client ->
                     Text(text = client.name)
-                    Text(text = client.name)
+                    Text(text = client.occupation)
                 }
             }
         }
@@ -252,12 +252,12 @@ private fun emailInvalid(email: String): Boolean {
 }
 
 @Suppress("DEPRECATION")
-private fun dateInvalid(fecha: Date): Boolean {
+private fun dateInvalid(date: Date): Boolean {
     val c = Calendar.getInstance()
     val year = c.get(Calendar.YEAR) - 17
     val month = c.get(Calendar.MONTH)
     val day = c.get(Calendar.DAY_OF_MONTH)
-    return fecha > Date(year, month, day) || fecha < Date(1930,1,1)
+    return date > Date(year, month, day) || date < Date(1930,1,1)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -266,7 +266,7 @@ fun DropdownMenuBox(
     viewModel: ClientViewModel
 ) {
 
-    val opciones = arrayOf("Engineer", "Doctor", "Lawyer", "Architect", "Firefighter")
+    val options = arrayOf("Engineer", "Doctor", "Lawyer", "Architect", "Firefighter")
     var expanded by remember { mutableStateOf(false) }
 
 
@@ -300,7 +300,7 @@ fun DropdownMenuBox(
                 modifier = Modifier
                     .fillMaxWidth()
             ) {
-                opciones.forEach { item ->
+                options.forEach { item ->
                     DropdownMenuItem(
                         text = { Text(text = item) },
                         onClick = {
