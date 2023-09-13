@@ -1,6 +1,8 @@
 package com.kotlin.ticketapp
+import android.location.Address
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -13,13 +15,24 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import java.util.Date
 import javax.inject.Inject
 
 @HiltViewModel
-class ClienteViewModel @Inject constructor(
+class ClientViewModel @Inject constructor(
     private val clienteDb: TicketDb,
 ) : ViewModel() {
+
     var Name by mutableStateOf("")
+    var PhoneNumber by mutableStateOf("")
+    var CellNumber by mutableStateOf("")
+    var Email by mutableStateOf("")
+    var Address by mutableStateOf("")
+    var Birthdate by mutableStateOf("")
+    var OccupationId by mutableStateOf(0)
+    var OccupationOptions = listOf("Engineer", "Doctor", "Accounting")
+    var selectedOccupation by mutableStateOf<String>("")
+
 
     private val _isMessageShown = MutableSharedFlow<Boolean>()
     val isMessageShownFlow = _isMessageShown.asSharedFlow()
@@ -39,7 +52,14 @@ class ClienteViewModel @Inject constructor(
     fun saveCliente() {
         viewModelScope.launch {
             val cliente = Client(
-                name = Name
+                name = Name,
+                phoneNumber = PhoneNumber,
+                cellNumber = CellNumber,
+                email = Email,
+                address = Address,
+                //birthdate = Birthdate,
+                occupationId = OccupationId
+
             )
             clienteDb.ticketDao().save(cliente)
             limpiar()
@@ -48,5 +68,12 @@ class ClienteViewModel @Inject constructor(
 
     fun limpiar() {
         Name = ""
+        PhoneNumber = ""
+        CellNumber = ""
+        Email = ""
+        Address = ""
+        //Birthdate = Date
+        OccupationId = 0
+
     }
 }
