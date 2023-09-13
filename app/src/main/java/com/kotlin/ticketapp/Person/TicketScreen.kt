@@ -211,13 +211,12 @@ fun TicketScreen(
                                 .clickable {
                                     datePickerDialog.show()
                                 }
-                                .size(30.dp, 30.dp),
-                            tint = MaterialTheme.colorScheme.surface
+                                .size(30.dp, 30.dp)
                         )
                     },
                 )
 
-                //Birth date
+                //Birth date\
                 DropdownMenuBox(viewModel)
 
                 val keyboardController = LocalSoftwareKeyboardController.current
