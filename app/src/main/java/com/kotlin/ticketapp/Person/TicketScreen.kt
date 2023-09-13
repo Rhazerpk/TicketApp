@@ -133,7 +133,15 @@ fun TicketScreen(
                     onValueChange = { viewModel.Name = it },
                     modifier = Modifier.fillMaxWidth(),
                     label = { Text(text = "Name") },
-                    singleLine = true
+                    singleLine = true,
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Text,
+                        capitalization = KeyboardCapitalization.Sentences,
+                        imeAction = ImeAction.Next
+                    ),
+                    keyboardActions =  KeyboardActions(
+                        onNext = { focusManager.moveFocus(FocusDirection.Down) }
+                    ),
                 )
                 OutlinedTextField(
                     value = viewModel.PhoneNumber,
@@ -142,7 +150,7 @@ fun TicketScreen(
                     label = { Text(text = "Telephone") },
                     singleLine = true,
                     keyboardOptions = KeyboardOptions(
-                        keyboardType = KeyboardType.Number,
+                        keyboardType = KeyboardType.Phone,
                         imeAction = ImeAction.Next
                     ),
                     keyboardActions =  KeyboardActions(
@@ -156,7 +164,7 @@ fun TicketScreen(
                     label = { Text(text = "Cellphone") },
                     singleLine = true,
                     keyboardOptions = KeyboardOptions(
-                        keyboardType = KeyboardType.Number,
+                        keyboardType = KeyboardType.Phone,
                         imeAction = ImeAction.Next
                     ),
                     keyboardActions =  KeyboardActions(
