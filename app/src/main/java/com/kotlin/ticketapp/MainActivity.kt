@@ -1,18 +1,27 @@
 package com.kotlin.ticketapp
 
-import android.content.ClipData.Item
+
+import android.app.DatePickerDialog
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -29,24 +38,36 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardCapitalization
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.kotlin.ticketapp.Person.TicketScreen
 import com.kotlin.ticketapp.data.local.entities.Client
-import com.kotlin.ticketapp.domain.TicketDb
 import com.kotlin.ticketapp.ui.theme.TicketAppTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
-
+import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.util.Date
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    lateinit var ticketDb: TicketDb
+    //lateinit var ticketDb: TicketDb
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -63,90 +84,14 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
-@Composable
-fun TicketScreen(viewModel: ClienteViewModel = hiltViewModel()) {
 
-    val clientes by viewModel.clientes.collectAsStateWithLifecycle()
-
-    val snackbarHostState = remember { SnackbarHostState() }
-
-    LaunchedEffect(Unit) {
-        viewModel.isMessageShownFlow.collectLatest {
-            if (it) {
-                snackbarHostState.showSnackbar(
-                    message = "Cliente guardado",
-                    duration = SnackbarDuration.Short
-                )
-            }
-        }
-    }
-
-    Scaffold(
-        snackbarHost = { SnackbarHost(snackbarHostState) },
-        modifier = Modifier
-            .fillMaxSize(),
-        topBar = {
-            TopAppBar(
-                title = { Text(text = "Clientes") },
-                actions = {
-                    IconButton(onClick = { viewModel.limpiar() }) {
-                        Icon(
-                            imageVector = Icons.Default.Refresh, contentDescription = "Refresh"
-                        )
-                    }
-                }
-            )
-        }
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(it)
-                .padding(8.dp)
-        ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp)
-            ) {
-                Text(text = "Client details", style = MaterialTheme.typography.titleMedium)
-
-                OutlinedTextField(
-                    value = viewModel.Name,
-                    onValueChange = { viewModel.Name = it },
-                    modifier = Modifier.fillMaxWidth(),
-                    label = { Text(text = "Name") },
-                    singleLine = true
-                )
-                val keyboardController = LocalSoftwareKeyboardController.current
-                OutlinedButton(onClick = {
-                    keyboardController?.hide()
-                    if(viewModel.Name != ""){
-                        viewModel.saveCliente()
-                        viewModel.setMessageShown()}
-
-                }, modifier = Modifier.fillMaxWidth())
-                {
-                    Icon(imageVector = Icons.Default.CheckCircle, contentDescription = "Guardar")
-                    Text(text = "Guardar")
-                }
-            }
-
-            Text(text = "Lista de clientes", style = MaterialTheme.typography.titleMedium)
-            LazyColumn(modifier = Modifier.fillMaxWidth()) {
-                items(clientes){Client ->
-                    Text(text = Client.name)
-                }
-            }
-        }
-    }
-}
 
 @Preview(showBackground = true)
 @Composable
 fun TicketScreenPreview() {
     TicketAppTheme {
-        TicketScreen()
+
     }
 }
+
+

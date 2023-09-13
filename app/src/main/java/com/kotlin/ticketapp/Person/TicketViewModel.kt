@@ -1,4 +1,4 @@
-package com.kotlin.ticketapp
+package com.kotlin.ticketapp.Person
 import android.location.Address
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -28,11 +28,8 @@ class ClientViewModel @Inject constructor(
     var CellNumber by mutableStateOf("")
     var Email by mutableStateOf("")
     var Address by mutableStateOf("")
-    var Birthdate by mutableStateOf("")
-    var OccupationId by mutableStateOf(0)
-    var OccupationOptions = listOf("Engineer", "Doctor", "Accounting")
-    var selectedOccupation by mutableStateOf<String>("")
-
+    var Birthdate by mutableStateOf(Date())
+    var Occupation by mutableStateOf("")
 
     private val _isMessageShown = MutableSharedFlow<Boolean>()
     val isMessageShownFlow = _isMessageShown.asSharedFlow()
@@ -57,8 +54,8 @@ class ClientViewModel @Inject constructor(
                 cellNumber = CellNumber,
                 email = Email,
                 address = Address,
-                //birthdate = Birthdate,
-                occupationId = OccupationId
+                birthdate = Birthdate,
+                occupation = Occupation
 
             )
             clienteDb.ticketDao().save(cliente)
@@ -72,8 +69,8 @@ class ClientViewModel @Inject constructor(
         CellNumber = ""
         Email = ""
         Address = ""
-        //Birthdate = Date
-        OccupationId = 0
+        Birthdate = Date()
+        Occupation = ""
 
     }
 }
