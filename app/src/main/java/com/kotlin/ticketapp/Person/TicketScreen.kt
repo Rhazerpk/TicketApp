@@ -217,14 +217,16 @@ fun TicketScreen(
                     },
                 )
 
+                //Birth date
                 DropdownMenuBox(viewModel)
 
                 val keyboardController = LocalSoftwareKeyboardController.current
                 OutlinedButton(onClick = {
                     keyboardController?.hide()
-                    if(viewModel.Name != ""){
+                    if (viewModel.Validation()) {
                         viewModel.saveCliente()
-                        viewModel.setMessageShown()}
+                        viewModel.setMessageShown()
+                    }
 
                 }, modifier = Modifier.fillMaxWidth())
                 {

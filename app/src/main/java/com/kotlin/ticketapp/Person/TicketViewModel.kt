@@ -31,8 +31,33 @@ class ClientViewModel @Inject constructor(
     var Birthdate by mutableStateOf(Date())
     var Occupation by mutableStateOf("")
 
+    var nameError by mutableStateOf(true)
+    var phoneError by mutableStateOf(true)
+    var cellError by mutableStateOf(true)
+    var emailError by mutableStateOf(true)
+    var addressError by mutableStateOf(true)
+    var birthdateError by mutableStateOf(true)
+    var occupationError by mutableStateOf(true)
+
     private val _isMessageShown = MutableSharedFlow<Boolean>()
     val isMessageShownFlow = _isMessageShown.asSharedFlow()
+
+
+    fun Validation(): Boolean {
+
+        nameError = Name.isNotEmpty()
+        phoneError = PhoneNumber.isNotEmpty()
+        emailError = Email.isNotEmpty()
+        addressError = Address.isNotEmpty()
+        cellError = CellNumber.isNotEmpty()
+        occupationError = Occupation.isNotEmpty()
+
+        if (Name == "" || PhoneNumber == "" || Email == "" || Address == "" || CellNumber == "" || Occupation == "")
+            return false
+
+        return true
+
+    }
 
     fun setMessageShown() {
         viewModelScope.launch {
